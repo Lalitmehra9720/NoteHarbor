@@ -92,7 +92,7 @@ const Dashboard = () => {
       return 0;
     });
 
-  // 🔥 Create initials from name
+  //  Create initials from name
   const getInitials = (name) => {
     if (!name) return "";
     const words = name.trim().split(" ");
@@ -170,7 +170,7 @@ const Dashboard = () => {
               Status
             </p>
             <h2 className="text-lg font-semibold mt-2 text-green-500">
-              Active 🚀
+              Active 
             </h2>
           </div>
         </div>

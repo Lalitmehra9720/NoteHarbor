@@ -39,6 +39,8 @@ router.delete("/:id", protect, async (req, res) => {
   res.json({ message: "Note deleted" });
 });
 
+
+
 // UPDATE note
 router.put("/:id", protect, async (req, res) => {
   const note = await Note.findById(req.params.id);
@@ -57,6 +59,24 @@ router.put("/:id", protect, async (req, res) => {
   const updatedNote = await note.save();
 
   res.json(updatedNote);
+});
+
+// GET single note
+router.get("/:id", protect, async (req, res) => {
+  try {
+    const note = await Note.findOne({
+      _id: req.params.id,
+      user: req.user._id,
+    });
+
+    if (!note) {
+      return res.status(404).json({ message: "Note not found" });
+    }
+
+    res.json(note);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
 });
 
 // GET all notes for logged-in user

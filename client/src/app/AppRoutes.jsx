@@ -1,13 +1,10 @@
-
-
 import { Routes, Route } from "react-router-dom";
 
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Dashboard from "../pages/Dashboard";
-import CreateNote from "../pages/CreateNote";
-import EditNote from "../pages/EditNote";
+import ViewNote from "../pages/ViewNote";
 
 import ProtectedRoute from "../utils/ProtectedRoute";
 
@@ -17,7 +14,6 @@ import MainLayout from "../layouts/MainLayout";
 function AppRoutes() {
   return (
     <Routes>
-
       {/* Main Layout Pages */}
       <Route
         path="/"
@@ -27,7 +23,16 @@ function AppRoutes() {
           </MainLayout>
         }
       />
-
+      <Route
+        path="/note/:id"
+        element={
+          <ProtectedRoute>
+            <MainLayout>
+              <ViewNote />
+            </MainLayout>
+          </ProtectedRoute>
+        }
+      />
       <Route
         path="/dashboard"
         element={
@@ -39,27 +44,6 @@ function AppRoutes() {
         }
       />
 
-      <Route
-        path="/create"
-        element={
-          <ProtectedRoute>
-            <MainLayout>
-              <CreateNote />
-            </MainLayout>
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/edit/:id"
-        element={
-          <ProtectedRoute>
-            <MainLayout>
-              <EditNote />
-            </MainLayout>
-          </ProtectedRoute>
-        }
-      />
 
       {/* Auth Layout Pages */}
       <Route
@@ -79,7 +63,6 @@ function AppRoutes() {
           </AuthLayout>
         }
       />
-
     </Routes>
   );
 }

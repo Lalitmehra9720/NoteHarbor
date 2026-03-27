@@ -1,11 +1,12 @@
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import axiosInstance from "../utils/axiosInstance";
 import useAuth from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import Button from "../components/ui/Button";
 
 const Login = () => {
-  const { login } = useAuth();
+  const { login, user } = useAuth(); // get user also
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
@@ -14,6 +15,13 @@ const Login = () => {
   });
 
   const [error, setError] = useState("");
+
+  //  Redirect after user state updates
+  useEffect(() => {
+    if (user) {
+      navigate("/dashboard");
+    }
+  }, [user, navigate]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -29,8 +37,7 @@ const Login = () => {
 
     try {
       const { data } = await axiosInstance.post("/auth/login", form);
-      login(data.token);
-      navigate("/dashboard");
+      login(data.token); // only login here
     } catch (err) {
       setError("Invalid credentials");
     }
@@ -45,7 +52,6 @@ const Login = () => {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
-
         <input
           type="email"
           name="email"
@@ -62,11 +68,7 @@ const Login = () => {
           className="w-full p-3 border rounded-lg"
         />
 
-        <Button
-          type="submit"
-        >
-          Login
-        </Button>
+        <Button type="submit">Login</Button>
       </form>
     </div>
   );
