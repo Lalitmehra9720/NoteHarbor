@@ -8,28 +8,34 @@ import {
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-100 dark:bg-slate-900 text-gray-700 dark:text-gray-300 ">
+    <footer
+      style={{
+        background: "var(--bg-secondary)",
+        color: "var(--text)",
+      }}
+      className="transition"
+    >
       <div className="max-w-7xl mx-auto px-6 py-12 grid gap-10 sm:grid-cols-2 md:grid-cols-4">
 
         {/* Brand Section */}
         <div>
           <h2 className="text-2xl font-bold text-indigo-600">NoteHarbor</h2>
-          <p className="mt-4 text-sm">
+          <p className="mt-4 text-sm" style={{ opacity: 0.8 }}>
             Organize your thoughts and boost productivity with a secure
             cloud-based notes app.
           </p>
 
           <div className="flex gap-4 mt-4 text-xl">
-            <a href="#" className="hover:text-indigo-600">
+            <a href="#" className="hover:text-indigo-600 transition">
               <FaGithub />
             </a>
-            <a href="#" className="hover:text-indigo-600">
+            <a href="#" className="hover:text-indigo-600 transition">
               <FaLinkedin />
             </a>
-            <a href="#" className="hover:text-indigo-600">
+            <a href="#" className="hover:text-indigo-600 transition">
               <FaTwitter />
             </a>
-            <a href="#" className="hover:text-indigo-600">
+            <a href="#" className="hover:text-indigo-600 transition">
               <FaEnvelope />
             </a>
           </div>
@@ -67,7 +73,12 @@ const Footer = () => {
       </div>
 
       {/* Bottom Line */}
-      <div className="border-t border-gray-300 dark:border-gray-700 py-6 text-center text-sm">
+      <div
+        className="py-6 text-center text-sm"
+        style={{
+          borderTop: "1px solid var(--border)",
+        }}
+      >
         © {new Date().getFullYear()} NoteHarbor. All rights reserved.
       </div>
     </footer>

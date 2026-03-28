@@ -92,7 +92,6 @@ const Dashboard = () => {
       return 0;
     });
 
-  //  Create initials from name
   const getInitials = (name) => {
     if (!name) return "";
     const words = name.trim().split(" ");
@@ -104,78 +103,68 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 py-10 px-4 md:px-8">
+    <div
+      className="min-h-screen py-10 px-4 md:px-8"
+      style={{
+        background: "var(--gradient)",
+        color: "var(--text)",
+      }}
+    >
       <div className="max-w-7xl mx-auto">
 
-        {/* 🔥 Top Header Bar */}
+        {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-10">
 
-          {/* Left Side */}
-          
-          <div className="flex items-center gap-3"
-          >
-            <div className="w-17 h-17 rounded-full bg-indigo-600 text-white flex items-center justify-center text-3xl font-semibold shadow-md">
+          <div className="flex items-center gap-3">
+            <div className="w-16 h-16 rounded-full bg-indigo-600 text-white flex items-center justify-center text-2xl font-semibold shadow-md">
               {getInitials(user?.name)}
             </div>
+
             <div>
-                <h1 className="text-3xl md:text-4xl font-bold dark:text-white">
-              {user?.name} Dashboard
-            </h1>
-            <p className="text-gray-500 dark:text-gray-400 mt-2">
-              {user?.email}
-            </p>
+              <h1 className="text-3xl md:text-4xl font-bold">
+                {user?.name} Dashboard
+              </h1>
+
+              <p style={{ opacity: 0.7 }}>
+                {user?.email}
+              </p>
             </div>
-            
           </div>
 
-          {/* Right Side Profile */}
-          <div className="flex items-center gap-4">
+          <Button
+            onClick={() => {
+              setIsEditing(false);
+              setShowModal(true);
+            }}
+          >
+            + Create Note
+          </Button>
+        </div>
 
-            <Button
-              onClick={() => {
-                setIsEditing(false);
-                setShowModal(true);
+        {/* Stats */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+          {[ 
+            { title: "Total Notes", value: notes.length },
+            { title: "Showing Results", value: filteredNotes.length },
+            { title: "Status", value: "Active" },
+          ].map((item, i) => (
+            <div
+              key={i}
+              className="p-6 rounded-2xl shadow-sm"
+              style={{
+                background: "var(--card)",
+                border: "1px solid var(--border)",
               }}
             >
-              + Create Note
-            </Button>
-
-            
-
-          </div>
+              <p style={{ opacity: 0.6 }}>{item.title}</p>
+              <h2 className="text-3xl font-bold mt-2">
+                {item.value}
+              </h2>
+            </div>
+          ))}
         </div>
 
-        {/* 🔥 Stats Section */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-          <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-700">
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              Total Notes
-            </p>
-            <h2 className="text-3xl font-bold mt-2 dark:text-white">
-              {notes.length}
-            </h2>
-          </div>
-
-          <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-700">
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              Showing Results
-            </p>
-            <h2 className="text-3xl font-bold mt-2 dark:text-white">
-              {filteredNotes.length}
-            </h2>
-          </div>
-
-          <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-700">
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              Status
-            </p>
-            <h2 className="text-lg font-semibold mt-2 text-green-500">
-              Active 
-            </h2>
-          </div>
-        </div>
-
-        {/* 🔍 Toolbar */}
+        {/* Toolbar */}
         <NotesToolbar
           search={search}
           setSearch={setSearch}
@@ -183,22 +172,29 @@ const Dashboard = () => {
           setSort={setSort}
         />
 
-        {/* 🔥 Notes Grid */}
+        {/* Notes */}
         {loading ? (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-8">
             {[1, 2, 3].map((i) => (
               <div
                 key={i}
-                className="animate-pulse bg-white dark:bg-slate-800 h-40 rounded-2xl"
+                className="h-40 rounded-2xl animate-pulse"
+                style={{ background: "var(--card)" }}
               />
             ))}
           </div>
         ) : filteredNotes.length === 0 ? (
-          <div className="bg-white dark:bg-slate-800 p-12 rounded-2xl text-center shadow-sm border border-gray-100 dark:border-slate-700 mt-10">
-            <h2 className="text-2xl font-semibold dark:text-white">
+          <div
+            className="p-12 rounded-2xl text-center mt-10"
+            style={{
+              background: "var(--card)",
+              border: "1px solid var(--border)",
+            }}
+          >
+            <h2 className="text-2xl font-semibold">
               No Notes Found
             </h2>
-            <p className="text-gray-500 dark:text-gray-400 mt-3">
+            <p style={{ opacity: 0.7 }}>
               Start by creating your first note.
             </p>
           </div>
@@ -219,7 +215,7 @@ const Dashboard = () => {
           </div>
         )}
 
-        {/* 🔥 Modal */}
+        {/* Modal */}
         <NoteModal
           show={showModal}
           onClose={() => setShowModal(false)}

@@ -1,8 +1,9 @@
+
 const Button = ({
   children,
   onClick,
   type = "button",
-  variant = "primary", // primary | theme
+  variant = "primary",
   className = "",
   disabled = false,
 }) => {
@@ -10,11 +11,9 @@ const Button = ({
     "px-5 py-2.5 rounded-md cursor-pointer transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed";
 
   const variants = {
-    primary:
-      "bg-sky-600 hover:bg-sky-700 text-white",
+    primary: "bg-sky-600 hover:bg-sky-700 text-white",
 
-    theme:
-      "bg-yellow-500 hover:bg-yellow-600 text-black dark:bg-indigo-500 dark:hover:bg-indigo-600 dark:text-white",
+    theme: "bg-indigo-600 hover:bg-indigo-700 text-white",
   };
 
   return (

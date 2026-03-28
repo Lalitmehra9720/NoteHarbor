@@ -1,1 +1,48 @@
 @import "tailwindcss";
+
+/* 🌤️ LIGHT THEME (Premium Soft UI) */
+:root {
+  --bg: #f1f5f9;        /* soft neutral gray */
+  --bg-secondary: #e2e8f0;
+  --text: #0f172a;      /* deep slate */
+  --card: #f8fafc;      /* slightly elevated */
+  --border: #cbd5e1;
+   --glass: rgba(255, 255, 255, 0.7);
+  --glass-light: rgba(255, 255, 255, 0.5);
+
+  /* 🔥 Gradient */
+  --gradient: linear-gradient(
+    135deg,
+    #f1f5f9 0%,
+    #e2e8f0 40%,
+    #cbd5e1 100%
+  );
+}
+
+/* 🌙 DARK THEME */
+[data-theme="dark"] {
+  --bg: #020617;        /* deep dark (not blueish too much) */
+  --bg-secondary: #0f172a;
+  --text: #e2e8f0;
+  --card: #020617;
+  --border: #1e293b;
+  --glass: rgba(15, 23, 42, 0.75);
+  --glass-light: rgba(255, 255, 255, 0.06);
+
+  /* 🔥 Gradient */
+  --gradient: linear-gradient(
+    135deg,
+    #020617 0%,
+    #0f172a 50%,
+    #1e293b 100%
+  );
+}
+
+/* 🌍 GLOBAL */
+body {
+  background: var(--gradient);
+  color: var(--text);
+  transition: background 0.4s ease, color 0.3s ease;
+}
+
+

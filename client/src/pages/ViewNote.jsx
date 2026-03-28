@@ -1,3 +1,5 @@
+
+
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axiosInstance from "../utils/axiosInstance";
@@ -21,17 +23,36 @@ const ViewNote = () => {
   };
 
   if (!note) {
-    return <div className="text-center py-20">Loading...</div>;
+    return (
+      <div
+        className="text-center py-20"
+        style={{ color: "var(--text)" }}
+      >
+        Loading...
+      </div>
+    );
   }
 
   return (
-    <div className="max-w-4xl mx-auto py-16 px-6">
-      <div className="bg-white dark:bg-slate-800 p-10 rounded-3xl shadow-lg">
-        <h1 className="text-3xl font-bold mb-6 dark:text-white">
+    <div
+      className="max-w-4xl mx-auto py-16 px-6"
+      style={{ color: "var(--text)" }}
+    >
+      <div
+        className="p-10 rounded-3xl shadow-lg"
+        style={{
+          background: "var(--card)",
+          border: "1px solid var(--border)",
+        }}
+      >
+        <h1 className="text-3xl font-bold mb-6">
           {note.title}
         </h1>
 
-        <p className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap leading-relaxed">
+        <p
+          className="whitespace-pre-wrap leading-relaxed"
+          style={{ opacity: 0.8 }}
+        >
           {note.content}
         </p>
       </div>
