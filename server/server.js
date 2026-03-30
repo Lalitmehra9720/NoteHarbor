@@ -25,7 +25,9 @@ app.get("/", (req, res) => {
   res.send("API Running...");
 });
 
-
+app.get("/api", (req, res) => {
+  res.send("API Running...");
+});
 
 mongoose
   .connect(process.env.MONGO_URI)
