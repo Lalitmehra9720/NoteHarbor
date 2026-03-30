@@ -7,9 +7,11 @@ import NoteCard from "../components/notes/NoteCard";
 import NoteModal from "../components/notes/noteModal";
 import NotesToolbar from "../components/notes/NotesToolbar";
 import useAuth from "../hooks/useAuth";
+import { FaUser } from "react-icons/fa";
+ // ✅ get setUser from context
 
 const Dashboard = () => {
-  const { user } = useAuth();
+  const { user, setUser} = useAuth();
 
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -38,6 +40,72 @@ const Dashboard = () => {
       setLoading(false);
     }
   };
+
+  
+
+const handleImageUpload = async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  // ❌ block huge files
+  if (file.size > 5 * 1024 * 1024) {
+    toast.error("Please select image less than 5MB");
+    return;
+  }
+
+  const reader = new FileReader();
+
+  reader.onloadend = () => {
+    const img = new Image();
+    img.src = reader.result;
+
+    img.onload = async () => {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+
+      const MAX_WIDTH = 300; // 🔥 resize
+      const scale = MAX_WIDTH / img.width;
+
+      canvas.width = MAX_WIDTH;
+      canvas.height = img.height * scale;
+
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+      // 🔥 compress
+      const compressed = canvas.toDataURL("image/jpeg", 0.6);
+
+      // convert base64 → blob
+      const res = await fetch(compressed);
+      const blob = await res.blob();
+
+      const formData = new FormData();
+      formData.append("image", blob, "profile.jpg");
+
+      try {
+        const { data } = await axiosInstance.put(
+          "/users/profile-image",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        // user.profileImage = data.profileImage;
+        setUser((prev) => ({
+  ...prev,
+  profileImage: data.profileImage,
+}));
+        toast.success("Profile updated 🚀");
+      } catch {
+        toast.error("Upload failed");
+      }
+    };
+  };
+
+  reader.readAsDataURL(file);
+};
 
   const handleSave = async () => {
     try {
@@ -115,7 +183,7 @@ const Dashboard = () => {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-10">
 
-          <div className="flex items-center gap-3">
+          {/* <div className="flex items-center gap-3">
             <div className="w-16 h-16 rounded-full bg-indigo-600 text-white flex items-center justify-center text-2xl font-semibold shadow-md">
               {getInitials(user?.name)}
             </div>
@@ -129,7 +197,50 @@ const Dashboard = () => {
                 {user?.email}
               </p>
             </div>
-          </div>
+          </div> */}
+          <div className="flex items-center gap-3">
+  <div className="relative group">
+    <label className="cursor-pointer">
+      <input
+        type="file"
+        className="hidden"
+        onChange={handleImageUpload}
+      />
+
+      <div
+        className="w-16 h-16 rounded-full overflow-hidden flex items-center justify-center shadow-md"
+        style={{
+          background: "var(--card)",
+          border: "2px solid var(--border)",
+        }}
+      >
+        {user?.profileImage ? (
+          <img
+            src={user.profileImage}
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <FaUser className="text-2xl opacity-60" />
+        )}
+      </div>
+
+      {/* Hover */}
+      <div className="absolute inset-0 bg-black/40 rounded-full opacity-0 group-hover:opacity-100 flex items-center justify-center text-white text-xs transition">
+        Edit
+      </div>
+    </label>
+  </div>
+
+  <div>
+    <h1 className="text-3xl md:text-4xl font-bold">
+      {user?.name} Dashboard
+    </h1>
+
+    <p style={{ opacity: 0.7 }}>
+      {user?.email}
+    </p>
+  </div>
+</div>
 
           <Button
             onClick={() => {
@@ -225,6 +336,7 @@ const Dashboard = () => {
           isEditing={isEditing}
         />
       </div>
+      
     </div>
   );
 };

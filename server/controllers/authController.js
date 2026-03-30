@@ -1,3 +1,4 @@
+
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import generateToken from "../utils/generateToken.js";
@@ -21,5 +22,11 @@ export const register = async (req, res) => {
 
   res.status(201).json({
     token: generateToken(user._id),
+    user: {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      profileImage: user.profileImage,
+    },
   });
 };
