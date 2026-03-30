@@ -4,11 +4,11 @@ import axiosInstance from "../utils/axiosInstance";
 import toast from "react-hot-toast";
 import Button from "../components/ui/Button";
 import NoteCard from "../components/notes/NoteCard";
-import NoteModal from "../components/notes/noteModal";
+import NoteModal from "../components/notes/Note_Modal"
 import NotesToolbar from "../components/notes/NotesToolbar";
 import useAuth from "../hooks/useAuth";
 import { FaUser } from "react-icons/fa";
- // ✅ get setUser from context
+ // get setUser from context
 
 const Dashboard = () => {
   const { user, setUser} = useAuth();
@@ -47,7 +47,7 @@ const handleImageUpload = async (e) => {
   const file = e.target.files[0];
   if (!file) return;
 
-  // ❌ block huge files
+  //  block huge files
   if (file.size > 5 * 1024 * 1024) {
     toast.error("Please select image less than 5MB");
     return;
@@ -183,21 +183,6 @@ const handleImageUpload = async (e) => {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-10">
 
-          {/* <div className="flex items-center gap-3">
-            <div className="w-16 h-16 rounded-full bg-indigo-600 text-white flex items-center justify-center text-2xl font-semibold shadow-md">
-              {getInitials(user?.name)}
-            </div>
-
-            <div>
-              <h1 className="text-3xl md:text-4xl font-bold">
-                {user?.name} Dashboard
-              </h1>
-
-              <p style={{ opacity: 0.7 }}>
-                {user?.email}
-              </p>
-            </div>
-          </div> */}
           <div className="flex items-center gap-3">
   <div className="relative group">
     <label className="cursor-pointer">
