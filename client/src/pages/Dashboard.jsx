@@ -170,6 +170,22 @@ const handleImageUpload = async (e) => {
     );
   };
 
+  const handlePin = async (id) => {
+  try {
+    const { data } = await axiosInstance.patch(`/notes/${id}/pin`);
+
+    setNotes((prev) =>
+      prev.map((note) =>
+        note._id === id ? data : note
+      )
+    );
+
+    toast.success(data.isPinned ? "Pinned 📌" : "Unpinned");
+  } catch {
+    toast.error("Pin failed");
+  }
+};
+
   return (
     <div
       className="min-h-screen py-10 px-4 md:px-8"
@@ -297,16 +313,27 @@ const handleImageUpload = async (e) => {
         ) : (
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 mt-10">
             {filteredNotes.map((note) => (
+              // <NoteCard
+              //   key={note._id}
+              //   note={note}
+              //   onEdit={(note) => {
+              //     setCurrentNote(note);
+              //     setIsEditing(true);
+              //     setShowModal(true);
+              //   }}
+              //   onDelete={handleDelete}
+              // />
               <NoteCard
-                key={note._id}
-                note={note}
-                onEdit={(note) => {
-                  setCurrentNote(note);
-                  setIsEditing(true);
-                  setShowModal(true);
-                }}
-                onDelete={handleDelete}
-              />
+  key={note._id}
+  note={note}
+  onEdit={(note) => {
+    setCurrentNote(note);
+    setIsEditing(true);
+    setShowModal(true);
+  }}
+  onDelete={handleDelete}
+  onPin={handlePin}
+/>
             ))}
           </div>
         )}
