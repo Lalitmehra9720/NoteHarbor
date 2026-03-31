@@ -40,9 +40,31 @@
 
 /* 🌍 GLOBAL */
 body {
+  margin: 0;
   background: var(--gradient);
   color: var(--text);
   transition: background 0.4s ease, color 0.3s ease;
 }
 
 
+.glass-card {
+  @apply p-6 md:p-8 rounded-2xl backdrop-blur-md;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+}
+
+.img-style {
+  @apply w-full max-w-[380px] h-[240px] object-cover rounded-xl shadow-lg mx-auto transition duration-300 hover:scale-105;
+}
+
+.title {
+  @apply text-xl font-semibold mb-2 text-indigo-400;
+}
+
+.desc {
+  @apply opacity-70 text-sm;
+}
+
+.icon {
+  @apply hover:scale-125 transition cursor-pointer;
+}

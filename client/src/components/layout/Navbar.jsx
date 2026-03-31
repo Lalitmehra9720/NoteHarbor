@@ -32,7 +32,7 @@ const Navbar = () => {
   return (
     <>
       <nav
-        className="flex flex-col md:flex-row justify-between items-center px-6 py-4"
+        className="w-full flex flex-col md:flex-row justify-between items-center px-6 py-4"
         style={{
           backgroundColor: "var(--bg)",
           color: "var(--text)",

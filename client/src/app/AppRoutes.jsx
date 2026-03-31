@@ -5,7 +5,7 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Dashboard from "../pages/Dashboard";
 import ViewNote from "../pages/ViewNote";
-
+import About from "../pages/About";
 import ProtectedRoute from "../utils/ProtectedRoute";
 
 import AuthLayout from "../layouts/AuthLayout";
@@ -20,6 +20,15 @@ function AppRoutes() {
         element={
           <MainLayout>
             <Home />
+          </MainLayout>
+        }
+      />
+      {/* <Route path="/about" element={<About />} /> */}
+      <Route
+        path="/about"
+        element={
+          <MainLayout>
+            <About />
           </MainLayout>
         }
       />
@@ -43,7 +52,6 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       />
-
 
       {/* Auth Layout Pages */}
       <Route
