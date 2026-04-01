@@ -6,6 +6,7 @@ import Register from "../pages/Register";
 import Dashboard from "../pages/Dashboard";
 import ViewNote from "../pages/ViewNote";
 import About from "../pages/About";
+import NotesPage from "../pages/NotesPage";
 import ProtectedRoute from "../utils/ProtectedRoute";
 
 import AuthLayout from "../layouts/AuthLayout";
@@ -32,6 +33,16 @@ function AppRoutes() {
           </MainLayout>
         }
       />
+      <Route
+  path="/notes"
+  element={
+    <ProtectedRoute>
+      <MainLayout>
+        <NotesPage />
+      </MainLayout>
+    </ProtectedRoute>
+  }
+/>
       <Route
         path="/note/:id"
         element={
