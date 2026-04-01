@@ -2,7 +2,6 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { FaReact, FaNodeJs } from "react-icons/fa";
 import { SiMongodb, SiTailwindcss } from "react-icons/si";
 
-
 const About = () => {
   const { scrollY } = useScroll();
 
@@ -10,35 +9,34 @@ const About = () => {
   const y2 = useTransform(scrollY, [0, 1000], [0, 30]);
 
   // 🔥 Get theme directly from DOM (same as Navbar)
-  const isDark =
-    document.documentElement.getAttribute("data-theme") === "dark";
+  const isDark = document.documentElement.getAttribute("data-theme") === "dark";
 
   // 🔥 Dynamic images
   const images = {
     hero: isDark ? "/images/hero.png" : "/images/hero_light.png",
     login: isDark ? "/images/login.png" : "/images/login_light.png",
     notes: isDark ? "/images/notes.png" : "/images/notes_light.png",
-    dashboard: isDark
-      ? "/images/dashboard.png"
-      : "/images/dashboard_light.png",
+    dashboard: isDark ? "/images/dashboard.png" : "/images/dashboard_light.png",
   };
 
   return (
-    
     <div
       className="min-h-screen px-4 py-12"
       style={{ background: "var(--gradient)", color: "var(--text)" }}
     >
       <div className="max-w-5xl mx-auto space-y-16">
-
         {/* 🔥 HERO */}
         <div className="grid md:grid-cols-2 gap-8 items-center">
-          <motion.div initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }}>
+          <motion.div
+            initial={{ opacity: 0, x: -40 }}
+            animate={{ opacity: 1, x: 0 }}
+          >
             <h1 className="text-3xl md:text-4xl font-bold mb-4">
               About <span className="text-indigo-400">NoteHarbor</span>
             </h1>
             <p className="opacity-70">
-              Capture ideas, organize notes and boost productivity with a modern experience.
+              Capture ideas, organize notes and boost productivity with a modern
+              experience.
             </p>
           </motion.div>
 
@@ -120,10 +118,8 @@ const About = () => {
             Full Stack Developer building modern web apps with MERN.
           </p>
         </div>
-
       </div>
     </div>
-    
   );
 };
 

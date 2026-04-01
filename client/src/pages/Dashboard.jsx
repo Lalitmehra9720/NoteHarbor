@@ -1,110 +1,135 @@
 
-import { useEffect, useState } from "react";
+
+import { useState, useEffect } from "react";
 import axiosInstance from "../utils/axiosInstance";
+import useNotes from "../hooks/useNotes";
+import useAuth from "../hooks/useAuth";
 import toast from "react-hot-toast";
+
 import Button from "../components/ui/Button";
 import NoteCard from "../components/notes/NoteCard";
 import NoteModal from "../components/notes/Note_Modal";
 import NotesToolbar from "../components/notes/NotesToolbar";
-import useAuth from "../hooks/useAuth";
-import { FaUser } from "react-icons/fa";
 import FeedbackModal from "../components/Modals/FeedbackModal";
-import { motion } from "framer-motion";
+
+import { FaUser } from "react-icons/fa";
 
 const Dashboard = () => {
   const { user, setUser, logout } = useAuth();
 
-  const [showFeedback, setShowFeedback] = useState(false);
-  const [notes, setNotes] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const {
+    notes,
+    createNote,
+    updateNote,
+    deleteNote,
+    togglePin,
+  } = useNotes();
 
+  const [showFeedback, setShowFeedback] = useState(false);
   const [showModal, setShowModal] = useState(false);
+
   const [currentNote, setCurrentNote] = useState({
     title: "",
     content: "",
   });
+
   const [isEditing, setIsEditing] = useState(false);
 
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [sort, setSort] = useState("newest");
 
-  useEffect(() => {
-    fetchNotes();
-  }, []);
-
+  // ✅ FIXED debounce
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(search);
     }, 300);
+
     return () => clearTimeout(timer);
   }, [search]);
 
-  const fetchNotes = async () => {
-    try {
-      const { data } = await axiosInstance.get("/notes");
-      setNotes(data);
-    } catch {
-      toast.error("Failed to fetch notes");
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  // ✅ SAVE NOTE
   const handleSave = async () => {
     try {
       if (isEditing) {
-        const { data } = await axiosInstance.put(
-          `/notes/${currentNote._id}`,
-          currentNote
-        );
-        setNotes((prev) =>
-          prev.map((note) => (note._id === data._id ? data : note))
-        );
+        await updateNote(currentNote._id, currentNote);
+        toast.success("Note updated");
       } else {
-        const { data } = await axiosInstance.post("/notes", currentNote);
-        setNotes((prev) => [data, ...prev]);
+        await createNote(currentNote);
+        toast.success("Note created");
       }
 
       setShowModal(false);
       setCurrentNote({ title: "", content: "" });
       setIsEditing(false);
-      toast.success("Saved");
     } catch {
       toast.error("Operation failed");
     }
   };
 
-  const handleDelete = async (id) => {
-    try {
-      await axiosInstance.delete(`/notes/${id}`);
-      setNotes((prev) => prev.filter((note) => note._id !== id));
-      toast.success("Deleted");
-    } catch {
-      toast.error("Delete failed");
+  // ✅ PROFILE IMAGE UPLOAD (FIXED)
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+      return toast.error("Max 5MB allowed");
     }
+
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      const img = new Image();
+      img.src = reader.result;
+
+      img.onload = async () => {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+
+        const MAX_WIDTH = 300;
+        const scale = MAX_WIDTH / img.width;
+
+        canvas.width = MAX_WIDTH;
+        canvas.height = img.height * scale;
+
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+        const compressed = canvas.toDataURL("image/jpeg", 0.6);
+
+        const res = await fetch(compressed);
+        const blob = await res.blob();
+
+        const formData = new FormData();
+        formData.append("image", blob, "profile.jpg");
+
+        try {
+          const { data } = await axiosInstance.put(
+            "/users/profile-image",
+            formData,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            }
+          );
+
+          setUser((prev) => ({
+            ...prev,
+            profileImage: data.profileImage,
+          }));
+
+          toast.success("Profile updated 🚀");
+        } catch (err) {
+          console.error(err);
+          toast.error("Upload failed");
+        }
+      };
+    };
+
+    reader.readAsDataURL(file);
   };
 
-  const handlePin = async (id) => {
-  try {
-    const { data } = await axiosInstance.patch(`/notes/${id}/pin`);
-
-    setNotes((prev) =>
-      prev.map((note) => (note._id === id ? data : note))
-    );
-
-    //  Smart toast
-    if (data.isPinned) {
-      toast.success("Note pinned ");
-    } else {
-      toast.success("Note unpinned");
-    }
-
-  } catch {
-    toast.error("Pin failed");
-  }
-};
-
+  // ✅ FILTER + SORT
   const filteredNotes = notes
     .filter((note) => {
       const term = debouncedSearch.toLowerCase();
@@ -123,78 +148,60 @@ const Dashboard = () => {
     });
 
   return (
-    <div
-      className="min-h-screen py-10 px-4 md:px-8"
-      style={{
-        background: "var(--gradient)",
-        color: "var(--text)",
-      }}
-    >
+    <div className="min-h-screen py-10 px-4 md:px-8">
       <div className="max-w-7xl mx-auto">
 
         {/* 🔥 HEADER */}
-        <motion.div
-          initial={{ opacity: 0, y: -30 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-10"
-        >
+        <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-6 mb-10">
+
+          {/* Profile */}
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-full overflow-hidden shadow-lg">
-              {user?.profileImage ? (
-                <img src={user.profileImage} className="w-full h-full object-cover" />
-              ) : (
-                <FaUser className="text-3xl m-auto mt-4 opacity-60" />
-              )}
-            </div>
+            <label className="relative group cursor-pointer">
+              <input
+                type="file"
+                className="hidden"
+                onChange={handleImageUpload}
+              />
+
+              <div className="w-20 h-20 rounded-full overflow-hidden border">
+                {user?.profileImage ? (
+                  <img
+                    src={user.profileImage}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <FaUser className="m-auto mt-6 text-xl opacity-60" />
+                )}
+              </div>
+
+              {/* Hover Overlay */}
+              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white text-xs transition rounded-full">
+                Edit
+              </div>
+            </label>
 
             <div>
-              <h1 className="text-4xl font-bold">
-                {user?.name}
-              </h1>
+              <h1 className="text-3xl font-bold">{user?.name}</h1>
               <p className="opacity-70">{user?.email}</p>
             </div>
           </div>
 
+          {/* Actions */}
           <div className="flex gap-3">
-            <Button onClick={() => setShowModal(true)}>
+            <Button
+              onClick={() => {
+                setIsEditing(false);
+                setShowModal(true);
+              }}
+            >
               + Create Note
             </Button>
 
-            <Button onClick={logout}>
-              Logout
-            </Button>
+            <Button onClick={logout}>Logout</Button>
           </div>
-        </motion.div>
-
-        {/* 🔥 STATS */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-          {[ 
-  { title: "Total Notes", value: notes.length },
-  { title: "Showing Results", value: filteredNotes.length },
-  { title: "Status", value: "Active", isStatus: true },
-].map((item, i) => (
-            <motion.div
-              key={i}
-              whileHover={{ scale: 1.05 }}
-              className="p-6 rounded-2xl backdrop-blur-lg shadow-lg"
-              style={{
-                background: "var(--glass)",
-                border: "1px solid var(--border)",
-              }}
-            >
-              <p className="opacity-60">{item.title}</p>
-              <h2
-  className={`text-3xl font-bold mt-2 ${
-    item.isStatus ? "text-green-500 animate-pulse" : ""
-  }`}
->
-  {item.value}
-</h2>
-            </motion.div>
-          ))}
         </div>
 
-        {/* 🔥 SEARCH */}
+        {/* 🔍 TOOLBAR */}
         <NotesToolbar
           search={search}
           setSearch={setSearch}
@@ -202,56 +209,33 @@ const Dashboard = () => {
           setSort={setSort}
         />
 
-        {/* 🔥 NOTES GRID */}
-        {loading ? (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-8">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="h-40 rounded-2xl animate-pulse bg-gray-300" />
-            ))}
-          </div>
-        ) : filteredNotes.length === 0 ? (
+        {/* 📒 NOTES */}
+        {filteredNotes.length === 0 ? (
           <div className="text-center mt-10">
             <h2 className="text-2xl font-semibold">
               No results for "{search}"
             </h2>
           </div>
         ) : (
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={{
-              hidden: {},
-              visible: {
-                transition: { staggerChildren: 0.1 },
-              },
-            }}
-            className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 mt-10"
-          >
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 mt-10">
             {filteredNotes.map((note) => (
-              <motion.div
+              <NoteCard
                 key={note._id}
-                variants={{
-                  hidden: { opacity: 0, y: 30 },
-                  visible: { opacity: 1, y: 0 },
+                note={note}
+                onEdit={(note) => {
+                  setCurrentNote(note);
+                  setIsEditing(true);
+                  setShowModal(true);
                 }}
-              >
-                <NoteCard
-                  note={note}
-                  onEdit={(note) => {
-                    setCurrentNote(note);
-                    setIsEditing(true);
-                    setShowModal(true);
-                  }}
-                  onDelete={handleDelete}
-                  onPin={handlePin}
-                  search={search}
-                />
-              </motion.div>
+                onDelete={deleteNote}
+                onPin={togglePin}
+                search={search}
+              />
             ))}
-          </motion.div>
+          </div>
         )}
 
-        {/* 🔥 MODAL */}
+        {/* 🧾 MODAL */}
         <NoteModal
           show={showModal}
           onClose={() => setShowModal(false)}
@@ -262,15 +246,10 @@ const Dashboard = () => {
         />
       </div>
 
-      {/* 🔥 FLOAT BUTTON */}
-      <motion.div
-        whileHover={{ scale: 1.1 }}
-        className="fixed bottom-6 right-6 z-50"
-      >
-        <Button onClick={() => setShowFeedback(true)}>
-          Feedback
-        </Button>
-      </motion.div>
+      {/* 💬 FEEDBACK */}
+      <div className="fixed bottom-6 right-6">
+        <Button onClick={() => setShowFeedback(true)}>Feedback</Button>
+      </div>
 
       <FeedbackModal
         show={showFeedback}
