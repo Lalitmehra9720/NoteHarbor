@@ -8,7 +8,7 @@ import NoteModal from "../components/notes/Note_Modal";
 import NotesToolbar from "../components/notes/NotesToolbar";
 import useAuth from "../hooks/useAuth";
 import { FaUser } from "react-icons/fa";
-import FeedbackModal from "../components/modals/feedbackModal";
+import FeedbackModal from "../components/modals/FeedbackModal";
 import { motion } from "framer-motion";
 
 const Dashboard = () => {
