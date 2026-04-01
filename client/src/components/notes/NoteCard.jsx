@@ -68,7 +68,7 @@ const NoteCard = ({ note, onEdit, onDelete, onPin, search }) => {
 
         {/* ✏️ EDIT */}
         <button
-          onClick={() => onEdit(note)}
+          onClick={(e) => e.stopPropagation() || onEdit(note)}
           className="
       w-9 h-9 flex items-center justify-center rounded-lg
       bg-white/5 text-blue-400
