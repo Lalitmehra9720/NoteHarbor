@@ -8,7 +8,9 @@ import ViewNote from "../pages/ViewNote";
 import About from "../pages/About";
 import NotesPage from "../pages/NotesPage";
 import ProtectedRoute from "../utils/ProtectedRoute";
-
+import HelpCenter from "../pages/docs/HelpCenter";
+import TermsOfService from "../pages/docs/TermsOfService";
+import PrivacyPolicy from "../pages/docs/PrivacyPolicy";
 import AuthLayout from "../layouts/AuthLayout";
 import MainLayout from "../layouts/MainLayout";
 
@@ -25,11 +27,36 @@ function AppRoutes() {
         }
       />
       {/* <Route path="/about" element={<About />} /> */}
-      <Route
+       <Route
         path="/about"
         element={
           <MainLayout>
             <About />
+          </MainLayout>
+        }
+      />
+      <Route
+        path="/help"
+        element={
+          <MainLayout>
+            <HelpCenter />
+          </MainLayout>
+        }
+      />
+       <Route
+        path="/privacy"
+        element={
+          <MainLayout>
+            <PrivacyPolicy />
+          </MainLayout>
+        }
+      />
+
+       <Route
+        path="/terms"
+        element={
+          <MainLayout>
+            <TermsOfService />
           </MainLayout>
         }
       />
