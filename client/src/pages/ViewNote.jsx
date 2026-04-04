@@ -1,16 +1,17 @@
+
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import axiosInstance from "../utils/axiosInstance";
 import toast from "react-hot-toast";
-import {
-  FiArrowLeft,
-  FiMaximize2,
-  FiX,
-  FiClock,
-  FiBookOpen,
-  FiCopy,
-  FiCheck,
-} from "react-icons/fi";
+import { FiArrowLeft, FiMaximize2, FiX, FiClock, FiCopy, FiCheck } from "react-icons/fi";
+
+const FONTS = [
+  { name: "Serif",   cls: "font-serif" },
+  { name: "Sans",    cls: "font-sans" },
+  { name: "Mono",    cls: "font-mono" },
+  { name: "Elegant", cls: "font-serif italic" },
+  { name: "Modern",  cls: "font-sans font-light tracking-wide" },
+];
 
 const ViewNote = () => {
   const { id } = useParams();
@@ -19,11 +20,10 @@ const ViewNote = () => {
   const [isReadingMode, setIsReadingMode] = useState(false);
   const [seconds, setSeconds] = useState(0);
   const [copied, setCopied] = useState(false);
+  const [fontCls, setFontCls] = useState("font-serif");
   const intervalRef = useRef(null);
 
-  useEffect(() => {
-    fetchNote();
-  }, [id]);
+  useEffect(() => { fetchNote(); }, [id]);
 
   useEffect(() => {
     if (isReadingMode) {
@@ -47,20 +47,12 @@ const ViewNote = () => {
 
   const handleCopyNote = () => {
     if (!note) return;
-
-    // Formatting the copied text professionally
-    const textToCopy = `${note.title.toUpperCase()}\n${"=".repeat(note.title.length)}\n\n${note.content}`;
-
-    navigator.clipboard
-      .writeText(textToCopy)
-      .then(() => {
-        setCopied(true);
-        toast.success("Note copied to clipboard");
-        setTimeout(() => setCopied(false), 2000);
-      })
-      .catch(() => {
-        toast.error("Failed to copy");
-      });
+    const text = `${note.title.toUpperCase()}\n${"=".repeat(note.title.length)}\n\n${note.content}`;
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(true);
+      toast.success("Note copied!");
+      setTimeout(() => setCopied(false), 2000);
+    });
   };
 
   const formatTime = (s) =>
@@ -73,75 +65,98 @@ const ViewNote = () => {
 
   if (!note)
     return (
-      <div className="flex items-center justify-center min-h-screen font-mono text-xs tracking-[0.25em] uppercase opacity-40">
-        Loading Note…
+      <div className="flex items-center justify-center min-h-screen font-mono text-[10px] tracking-widest opacity-30 uppercase">
+        Loading...
       </div>
     );
 
-  /* ── STANDARD VIEW ── */
+  /* ─────────────────────────────────────────
+     Font Selector — reusable, no invert hack
+  ───────────────────────────────────────── */
+  const FontSelector = ({ isFocus = false }) => (
+    <div className="vn-font-selector">
+      {FONTS.map((f) => {
+        const isActive = fontCls === f.cls;
+        return (
+          <button
+            key={f.name}
+            onClick={() => setFontCls(f.cls)}
+            className={`vn-font-opt ${isActive ? "vn-font-opt--active" : ""} ${
+              isFocus ? "vn-font-opt--focus" : ""
+            }`}
+          >
+            {f.name}
+          </button>
+        );
+      })}
+    </div>
+  );
+
+  /* ─────────────────────────────────────────
+     STANDARD VIEW
+  ───────────────────────────────────────── */
   if (!isReadingMode) {
     return (
-      <div className="min-h-screen transition-all duration-500">
-        <div className="max-w-[860px] mx-auto px-6 py-20 pb-[120px]">
-          {/* Back Button */}
+      <div className="min-h-screen transition-colors duration-500">
+        <div className="max-w-[900px] mx-auto px-6 py-16 pb-32">
+
+          {/* Back */}
           <button
             onClick={() => navigate(-1)}
-            className="vn-back-btn flex items-center gap-2 mb-12 font-mono text-[11px] tracking-[0.18em] uppercase opacity-[0.45] hover:opacity-100 transition-opacity duration-200 bg-transparent border-none cursor-pointer"
+            className="vn-back-btn flex items-center gap-2 mb-10 font-mono text-[10px] tracking-widest uppercase opacity-40 hover:opacity-100 transition-opacity bg-transparent border-none cursor-pointer"
           >
-            <FiArrowLeft size={13} />
-            Back to Dashboard
+            <FiArrowLeft size={12} /> Back
           </button>
 
           {/* Card */}
-          <div className="vn-card relative rounded-[28px] px-8 md:px-[60px] py-14 backdrop-blur-xl overflow-hidden border border-white/5 shadow-2xl">
-            {/* Ambient Glow */}
-            <div className="vn-card-glow absolute -top-20 -right-20 w-80 h-80 rounded-full pointer-events-none opacity-20" />
+          <div className="vn-card relative rounded-[32px] px-8 md:px-12 py-12">
 
-            {/* Header */}
-            <div className="vn-card-header flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-10 pb-9 border-b border-white/5">
-              <h1 className="vn-title m-0 font-extrabold text-3xl md:text-4xl leading-[1.15] tracking-[-0.03em] flex-1">
+            {/* Header: title → toolbar */}
+            <div className="flex flex-col gap-6 mb-12 pb-10 border-b vn-card-header">
+              <h1 className="vn-title m-0 font-black leading-tight tracking-tight break-words">
                 {note.title}
               </h1>
 
-              <div className="flex items-center gap-3 w-full lg:w-auto overflow-x-auto pb-2 lg:pb-0">
-                {/* Copy Button */}
+              {/* Meta badges */}
+              <div className="flex items-center gap-3 flex-wrap">
+                <span className="vn-meta-badge flex items-center gap-1.5 px-3 py-1.5 rounded-full font-mono text-[10px] font-bold tracking-widest uppercase">
+                  {wordCount} words
+                </span>
+                <span className="vn-meta-badge flex items-center gap-1.5 px-3 py-1.5 rounded-full font-mono text-[10px] font-bold tracking-widest uppercase">
+                  ~{readMins} min read
+                </span>
+              </div>
 
-                <button
-                  onClick={handleCopyNote}
-                  className={`flex items-center gap-2 px-5 py-3 rounded-full font-mono text-[10px] font-bold tracking-[0.15em] uppercase transition-all duration-300 border ${
-                    copied
-                      ? "bg-green-500/20 border-green-500 text-green-500"
-                      : "bg-current/5 border-current/10 hover:bg-current/10 text-current opacity-70 hover:opacity-100"
-                  }`}
-                >
-                  {copied ? <FiCheck size={14} /> : <FiCopy size={14} />}
-                  {copied ? "Copied" : "Copy"}
-                </button>
+              {/* Toolbar */}
+              <div className="flex flex-wrap items-center gap-3">
+                <FontSelector isFocus={false} />
 
-                {/* Focus Button */}
-                <button
-                  onClick={() => setIsReadingMode(true)}
-                  className="vn-focus-btn flex items-center gap-2.5 px-6 py-3 rounded-full bg-white text-black font-mono text-[10px] font-bold tracking-[0.15em] uppercase whitespace-nowrap border-none cursor-pointer transition-all duration-[250ms] hover:-translate-y-0.5 active:scale-95"
-                >
-                  <FiMaximize2 size={13} />
-                  Focus Mode
-                </button>
+                <div className="flex items-center gap-2 ml-auto">
+                  {/* Copy button */}
+                  <button
+                    onClick={handleCopyNote}
+                    className={`vn-btn-copy flex items-center gap-2 px-5 py-2.5 rounded-xl font-mono text-[10px] font-bold tracking-widest uppercase transition-all ${
+                      copied ? "vn-btn-copy--done" : ""
+                    }`}
+                  >
+                    {copied ? <FiCheck size={13} /> : <FiCopy size={13} />}
+                    {copied ? "Copied!" : "Copy"}
+                  </button>
+
+                  {/* Focus button */}
+                  <button
+                    onClick={() => setIsReadingMode(true)}
+                    className="vn-focus-btn flex items-center gap-2 px-5 py-2.5 rounded-xl font-mono text-[10px] font-bold tracking-widest uppercase text-white"
+                  >
+                    <FiMaximize2 size={13} />
+                    Focus Mode
+                  </button>
+                </div>
               </div>
             </div>
 
-            {/* Meta Badges */}
-            <div className="flex flex-wrap gap-3 items-center justify-start mb-12">
-              <span className="vn-meta-badge flex items-center gap-1.5 px-[14px] py-1.5 rounded-full bg-white/5 border border-white/5 font-mono text-[11px] tracking-[0.1em] opacity-[0.70]">
-                <FiBookOpen size={11} />
-                {wordCount.toLocaleString()} words
-              </span>
-              <span className="vn-meta-badge flex items-center gap-1.5 px-[14px] py-1.5 rounded-full bg-white/5 border border-white/5 font-mono text-[11px] tracking-[0.1em] opacity-[0.70]">
-                <FiClock size={11} />~{readMins} min read
-              </span>
-            </div>
-
             {/* Content */}
-            <p className="font-['Lora',Georgia,serif] text-[1.15rem] leading-[1.9] whitespace-pre-wrap opacity-[0.88] tracking-[0.01em] selection:bg-white/20">
+            <p className={`${fontCls} vn-note-body whitespace-pre-wrap`}>
               {note.content}
             </p>
           </div>
@@ -150,58 +165,43 @@ const ViewNote = () => {
     );
   }
 
-  /* ── FOCUS MODE ── */
+  /* ─────────────────────────────────────────
+     FOCUS MODE
+  ───────────────────────────────────────── */
   return (
     <div className="vn-focus-overlay fixed inset-0 z-50 overflow-y-auto flex flex-col">
-      {/* Top Bar */}
-      <div className="vn-focus-bar sticky top-0 z-10 backdrop-blur-xl flex justify-between items-center px-8 h-[68px] w-full">
-        {/* Timer Pill */}
-        <div className="vn-timer flex items-center gap-2.5 px-[18px] py-2 rounded-full font-mono text-xs font-bold tracking-[0.12em] uppercase text-green-400">
-          <span className="relative flex h-2.5 w-2.5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
-            <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-green-500 shadow-[0_0_8px_#4ade80]" />
-          </span>
+
+      {/* Top bar */}
+      <div className="vn-focus-bar sticky top-0 z-10 flex justify-between items-center p-8 h-[72px] w-full ">
+        {/* Timer */}
+        <div className="vn-timer flex items-center gap-2 px-4 py-2 rounded-full font-mono text-[10px] font-bold tracking-widest uppercase">
           <FiClock size={12} />
-          Session — {formatTime(seconds)}
+          {formatTime(seconds)}
         </div>
 
-        {/* Exit Button */}
+        {/* Font selector — hidden on small screens */}
+        <div className="hidden md:block">
+          <FontSelector isFocus={true} />
+        </div>
+
+        {/* Exit */}
         <button
           onClick={() => setIsReadingMode(false)}
-          className="vn-exit-btn relative z-30 flex items-center gap-2 px-5 py-2 rounded-full font-mono text-[11px] font-bold tracking-[0.12em] uppercase cursor-pointer border border-white/20 transition-all duration-300 hover:!bg-red-600 hover:!text-white hover:!border-red-600"
+          className="vn-exit-btn flex items-center gap-2 px-5 py-2 rounded-full font-mono text-[10px] font-bold tracking-widest uppercase transition-all"
         >
-          <FiX size={14} />
-          Exit Focus
+          <FiX size={13} /> Close
         </button>
-      </div>
-      <div className="flex flex-wrap gap-3 mt-9 items-center justify-center">
-        <span className="vn-meta-badge flex items-center gap-1.5 px-[14px] py-1.5 rounded-full font-mono text-[11px] tracking-[0.1em] opacity-[0.70]">
-          <FiBookOpen size={11} />
-          {wordCount.toLocaleString()} words
-        </span>
-        <span className="vn-meta-badge flex items-center gap-1.5 px-[14px] py-1.5 rounded-full font-mono text-[11px] tracking-[0.1em] opacity-[0.70]">
-          <FiClock size={11} />~{readMins} min read
-        </span>
       </div>
 
       {/* Body */}
-      <div className="flex-1 w-full max-w-[920px] mx-auto px-5 md:px-16 pt-[42px] pb-30">
-        <h1 className="vn-focus-title font-black tracking-[-0.04em] leading-[1.08] mb-5">
+      <div className="flex-1 w-full max-w-[850px] mx-auto px-6 md:px-16 pt-16 pb-40">
+        <h1 className="vn-focus-title font-black tracking-tighter leading-[1.1] mb-8 break-words">
           {note.title}
         </h1>
-
-        {/* Divider */}
-        <div className="vn-divider w-12 h-[3px] rounded-full mb-12 opacity-70" />
-
-        {/* Content */}
-        <p className="vn-focus-text font-['Lora',Georgia,serif] leading-[1.85] whitespace-pre-wrap opacity-[0.82] tracking-[0.015em] font-light">
+        <div className="vn-divider w-14 h-[4px] rounded-full mb-14" />
+        <p className={`${fontCls} vn-focus-text whitespace-pre-wrap font-light`}>
           {note.content}
         </p>
-      </div>
-
-      {/* Footer */}
-      <div className="py-8 text-center font-mono text-[9px] tracking-[0.7em] uppercase opacity-20">
-        NoteHarbor · Immersive Reading
       </div>
     </div>
   );
