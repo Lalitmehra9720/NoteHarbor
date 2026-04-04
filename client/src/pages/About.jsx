@@ -8,10 +8,10 @@ const About = () => {
   const y1 = useTransform(scrollY, [0, 1000], [0, 60]);
   const y2 = useTransform(scrollY, [0, 1000], [0, 30]);
 
-  // 🔥 Get theme directly from DOM (same as Navbar)
+  //  Get theme directly from DOM (same as Navbar)
   const isDark = document.documentElement.getAttribute("data-theme") === "dark";
 
-  // 🔥 Dynamic images
+  //  Dynamic images
   const images = {
     hero: isDark ? "/images/hero.png" : "/images/hero_light.png",
     login: isDark ? "/images/login.png" : "/images/login_light.png",

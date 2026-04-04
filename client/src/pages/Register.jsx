@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -23,8 +22,7 @@ const Register = () => {
 
   // 🔐 Password validation
   const validatePassword = (password) => {
-    const regex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{6,}$/;
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{6,}$/;
     return regex.test(password);
   };
 
@@ -41,7 +39,7 @@ const Register = () => {
 
     if (!validatePassword(form.password)) {
       return toast.error(
-        "Password must contain uppercase, lowercase, special char & 6+ length"
+        "Password must contain uppercase, lowercase, special char & 6+ length",
       );
     }
 
@@ -55,9 +53,7 @@ const Register = () => {
       toast.success("Account created 🎉");
       navigate("/dashboard");
     } catch (error) {
-      toast.error(
-        error.response?.data?.message || "Registration failed"
-      );
+      toast.error(error.response?.data?.message || "Registration failed");
     } finally {
       setLoading(false);
     }
@@ -65,12 +61,9 @@ const Register = () => {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-6 text-center">
-        Create Account
-      </h2>
+      <h2 className="text-2xl font-bold mb-6 text-center">Create Account</h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-
         {/* Name */}
         <input
           type="text"
