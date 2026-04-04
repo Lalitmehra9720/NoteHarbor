@@ -8,6 +8,8 @@ import {
   FiX,
   FiClock,
   FiBookOpen,
+  FiCopy,
+  FiCheck,
 } from "react-icons/fi";
 
 const ViewNote = () => {
@@ -16,6 +18,7 @@ const ViewNote = () => {
   const [note, setNote] = useState(null);
   const [isReadingMode, setIsReadingMode] = useState(false);
   const [seconds, setSeconds] = useState(0);
+  const [copied, setCopied] = useState(false);
   const intervalRef = useRef(null);
 
   useEffect(() => {
@@ -42,6 +45,24 @@ const ViewNote = () => {
     }
   };
 
+  const handleCopyNote = () => {
+    if (!note) return;
+
+    // Formatting the copied text professionally
+    const textToCopy = `${note.title.toUpperCase()}\n${"=".repeat(note.title.length)}\n\n${note.content}`;
+
+    navigator.clipboard
+      .writeText(textToCopy)
+      .then(() => {
+        setCopied(true);
+        toast.success("Note copied to clipboard");
+        setTimeout(() => setCopied(false), 2000);
+      })
+      .catch(() => {
+        toast.error("Failed to copy");
+      });
+  };
+
   const formatTime = (s) =>
     `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
 
@@ -50,7 +71,6 @@ const ViewNote = () => {
     : 0;
   const readMins = Math.max(1, Math.round(wordCount / 230));
 
-  /* ── LOADING ── */
   if (!note)
     return (
       <div className="flex items-center justify-center min-h-screen font-mono text-xs tracking-[0.25em] uppercase opacity-40">
@@ -62,7 +82,7 @@ const ViewNote = () => {
   if (!isReadingMode) {
     return (
       <div className="min-h-screen transition-all duration-500">
-        <div className="max-w-[860px] mx-auto px-8 py-20 pb-[120px]">
+        <div className="max-w-[860px] mx-auto px-6 py-20 pb-[120px]">
           {/* Back Button */}
           <button
             onClick={() => navigate(-1)}
@@ -73,35 +93,55 @@ const ViewNote = () => {
           </button>
 
           {/* Card */}
-          <div className="vn-card relative rounded-[28px] px-[60px] py-14 backdrop-blur-xl overflow-hidden">
+          <div className="vn-card relative rounded-[28px] px-8 md:px-[60px] py-14 backdrop-blur-xl overflow-hidden border border-white/5 shadow-2xl">
             {/* Ambient Glow */}
-            <div className="vn-card-glow absolute -top-20 -right-20 w-80 h-80 rounded-full pointer-events-none" />
+            <div className="vn-card-glow absolute -top-20 -right-20 w-80 h-80 rounded-full pointer-events-none opacity-20" />
 
             {/* Header */}
-            <div className=" vn-card-header flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10 pb-9">
-              <h1 className="vn-title m-0 font-extrabold leading-[1.15] tracking-[-0.03em]">
+            <div className="vn-card-header flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-10 pb-9 border-b border-white/5">
+              <h1 className="vn-title m-0 font-extrabold text-3xl md:text-4xl leading-[1.15] tracking-[-0.03em] flex-1">
                 {note.title}
               </h1>
 
-              <button
-                onClick={() => setIsReadingMode(true)}
-                className="vn-focus-btn flex items-center gap-2.5 px-[22px] py-3 rounded-full text-white font-mono text-[10px] font-bold tracking-[0.15em] uppercase whitespace-nowrap shrink-0 border-none cursor-pointer transition-all duration-[250ms] hover:-translate-y-0.5 active:scale-95"
-              >
-                <FiMaximize2 size={13} />
-                Focus Mode
-              </button>
+              <div className="flex items-center gap-3 w-full lg:w-auto overflow-x-auto pb-2 lg:pb-0">
+                {/* Copy Button */}
+
+                <button
+                  onClick={handleCopyNote}
+                  className={`flex items-center gap-2 px-5 py-3 rounded-full font-mono text-[10px] font-bold tracking-[0.15em] uppercase transition-all duration-300 border ${
+                    copied
+                      ? "bg-green-500/20 border-green-500 text-green-500"
+                      : "bg-current/5 border-current/10 hover:bg-current/10 text-current opacity-70 hover:opacity-100"
+                  }`}
+                >
+                  {copied ? <FiCheck size={14} /> : <FiCopy size={14} />}
+                  {copied ? "Copied" : "Copy"}
+                </button>
+
+                {/* Focus Button */}
+                <button
+                  onClick={() => setIsReadingMode(true)}
+                  className="vn-focus-btn flex items-center gap-2.5 px-6 py-3 rounded-full bg-white text-black font-mono text-[10px] font-bold tracking-[0.15em] uppercase whitespace-nowrap border-none cursor-pointer transition-all duration-[250ms] hover:-translate-y-0.5 active:scale-95"
+                >
+                  <FiMaximize2 size={13} />
+                  Focus Mode
+                </button>
+              </div>
             </div>
-            <div className="flex flex-wrap gap-3 items-center justify-center mb-9">
-              <span className="vn-meta-badge flex items-center gap-1.5 px-[14px] py-1.5 rounded-full font-mono text-[11px] tracking-[0.1em] opacity-[0.70]">
+
+            {/* Meta Badges */}
+            <div className="flex flex-wrap gap-3 items-center justify-start mb-12">
+              <span className="vn-meta-badge flex items-center gap-1.5 px-[14px] py-1.5 rounded-full bg-white/5 border border-white/5 font-mono text-[11px] tracking-[0.1em] opacity-[0.70]">
                 <FiBookOpen size={11} />
                 {wordCount.toLocaleString()} words
               </span>
-              <span className="vn-meta-badge flex items-center gap-1.5 px-[14px] py-1.5 rounded-full font-mono text-[11px] tracking-[0.1em] opacity-[0.70]">
+              <span className="vn-meta-badge flex items-center gap-1.5 px-[14px] py-1.5 rounded-full bg-white/5 border border-white/5 font-mono text-[11px] tracking-[0.1em] opacity-[0.70]">
                 <FiClock size={11} />~{readMins} min read
               </span>
             </div>
+
             {/* Content */}
-            <p className="font-['Lora',Georgia,serif] text-[1.15rem] leading-[1.9] whitespace-pre-wrap opacity-[0.88] tracking-[0.01em]">
+            <p className="font-['Lora',Georgia,serif] text-[1.15rem] leading-[1.9] whitespace-pre-wrap opacity-[0.88] tracking-[0.01em] selection:bg-white/20">
               {note.content}
             </p>
           </div>

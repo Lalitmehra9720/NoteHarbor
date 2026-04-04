@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import axiosInstance from "../utils/axiosInstance";
 import useAuth from "../hooks/useAuth";
@@ -47,9 +46,7 @@ const Login = () => {
       toast.success("Welcome back");
       navigate("/dashboard");
     } catch (error) {
-      toast.error(
-        error.response?.data?.message || "Invalid credentials"
-      );
+      toast.error(error.response?.data?.message || "Invalid credentials");
     } finally {
       setLoading(false);
     }
@@ -57,12 +54,9 @@ const Login = () => {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-6 text-center">
-        Login
-      </h2>
+      <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-
         {/* Email */}
         <input
           type="email"
