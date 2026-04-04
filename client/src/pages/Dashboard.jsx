@@ -1,5 +1,3 @@
-
-
 import { useState, useEffect } from "react";
 import axiosInstance from "../utils/axiosInstance";
 import useNotes from "../hooks/useNotes";
@@ -17,13 +15,7 @@ import { FaUser } from "react-icons/fa";
 const Dashboard = () => {
   const { user, setUser, logout } = useAuth();
 
-  const {
-    notes,
-    createNote,
-    updateNote,
-    deleteNote,
-    togglePin,
-  } = useNotes();
+  const { notes, createNote, updateNote, deleteNote, togglePin } = useNotes();
 
   const [showFeedback, setShowFeedback] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -110,7 +102,7 @@ const Dashboard = () => {
               headers: {
                 "Content-Type": "multipart/form-data",
               },
-            }
+            },
           );
 
           setUser((prev) => ({
@@ -118,7 +110,7 @@ const Dashboard = () => {
             profileImage: data.profileImage,
           }));
 
-          toast.success("Profile updated 🚀");
+          toast.success("Profile updated ");
         } catch (err) {
           console.error(err);
           toast.error("Upload failed");
@@ -150,10 +142,8 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen py-10 px-4 md:px-8">
       <div className="max-w-7xl mx-auto">
-
         {/* 🔥 HEADER */}
         <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-6 mb-10">
-
           {/* Profile */}
           <div className="flex items-center gap-4">
             <label className="relative group cursor-pointer">

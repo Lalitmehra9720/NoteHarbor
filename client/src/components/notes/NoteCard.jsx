@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FaThumbtack, FaArrowRight, FaEdit, FaTrash } from "react-icons/fa";
+import { FiShare2 } from "react-icons/fi";
+import { jsPDF } from "jspdf";
 
 const NoteCard = ({ note, onEdit, onDelete, onPin, search }) => {
   const navigate = useNavigate();
@@ -22,6 +24,69 @@ const NoteCard = ({ note, onEdit, onDelete, onPin, search }) => {
     );
   };
 
+//   const handleShare = async (e) => {
+//   // e.stopPropagation prevents the card's "onClick" (like opening the modal) from firing
+//   e.stopPropagation(); 
+
+//   const shareData = {
+//     title: note.title,
+//     text: `📌 *${note.title}*\n\n${note.content}\n\n_Shared via Note-Harbor_`,
+//   };
+
+//   try {
+//     // Check if the browser supports the native Share API (works on Mobile & Safari)
+//     if (navigator.share) {
+//       await navigator.share(shareData);
+//     } else {
+//       // Fallback: Direct WhatsApp Link for Desktop/Unsupported browsers
+//       const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(
+//         shareData.text
+//       )}`;
+//       window.open(whatsappUrl, "_blank");
+//     }
+//   } catch (err) {
+//     console.error("Error sharing:", err);
+//   }
+// };
+
+const handleShare = async (e) => {
+  e.stopPropagation();
+
+  try {
+    // 1. Create PDF
+    const doc = new jsPDF();
+    
+    // Styling the PDF
+    doc.setFontSize(20);
+    doc.text(note.title, 10, 20); // Title at top
+    
+    doc.setFontSize(12);
+    const splitContent = doc.splitTextToSize(note.content, 180); // Wrap text
+    doc.text(splitContent, 10, 30);
+    
+    // 2. Generate PDF as a Blob
+    const pdfBlob = doc.output("blob");
+    
+    // 3. Create a File object from the Blob
+    const file = new File([pdfBlob], `${note.title}.pdf`, { type: "application/pdf" });
+
+    // 4. Check if the browser can share files
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({
+        files: [file],
+        title: note.title,
+        text: `Check out this note: ${note.title}`,
+      });
+    } else {
+      // Fallback: If sharing files isn't supported, just download it
+      doc.save(`${note.title}.pdf`);
+      toast.success("Sharing not supported, PDF downloaded instead!");
+    }
+  } catch (err) {
+    console.error("PDF Share Error:", err);
+    toast.error("Could not share PDF");
+  }
+};
   return (
     <motion.div
       whileHover={{ scale: 1.04 }}
@@ -134,6 +199,13 @@ const NoteCard = ({ note, onEdit, onDelete, onPin, search }) => {
         >
           Read More <FaArrowRight />
         </button>
+        <button
+  onClick={handleShare}
+  className="p-2 rounded-full hover:bg-white/20 transition-all duration-200 group"
+  title="Share Note"
+>
+  <FiShare2 className="text-lg opacity-60 group-hover:opacity-100 group-hover:scale-110" />
+</button>
       </div>
     </motion.div>
   );

@@ -44,7 +44,7 @@ const Login = () => {
 
       login(data.token);
 
-      toast.success("Welcome back 🎉");
+      toast.success("Welcome back");
       navigate("/dashboard");
     } catch (error) {
       toast.error(

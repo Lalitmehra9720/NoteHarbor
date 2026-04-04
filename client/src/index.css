@@ -1,16 +1,16 @@
-@import "tailwindcss";
+/* @import "tailwindcss";
 
-/* 🌤️ LIGHT THEME (Premium Soft UI) */
+
 :root {
-  --bg: #f1f5f9;        /* soft neutral gray */
+  --bg: #f1f5f9;        
   --bg-secondary: #e2e8f0;
-  --text: #0f172a;      /* deep slate */
-  --card: #f8fafc;      /* slightly elevated */
+  --text: #0f172a;     
+  --card: #f8fafc;      
   --border: #cbd5e1;
    --glass: rgba(255, 255, 255, 0.7);
   --glass-light: rgba(255, 255, 255, 0.5);
 
-  /* 🔥 Gradient */
+  
   --gradient: linear-gradient(
     135deg,
     #f1f5f9 0%,
@@ -19,9 +19,9 @@
   );
 }
 
-/* 🌙 DARK THEME */
+
 [data-theme="dark"] {
-  --bg: #020617;        /* deep dark (not blueish too much) */
+  --bg: #020617;        
   --bg-secondary: #0f172a;
   --text: #e2e8f0;
   --card: #020617;
@@ -29,7 +29,7 @@
   --glass: rgba(15, 23, 42, 0.75);
   --glass-light: rgba(255, 255, 255, 0.06);
 
-  /* 🔥 Gradient */
+ 
   --gradient: linear-gradient(
     135deg,
     #020617 0%,
@@ -38,7 +38,7 @@
   );
 }
 
-/* 🌍 GLOBAL */
+
 body {
   margin: 0;
   background: var(--gradient);
@@ -67,4 +67,194 @@ body {
 
 .icon {
   @apply hover:scale-125 transition cursor-pointer;
+} */
+
+@import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;500;700;800;900&family=DM+Mono:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+
+/* ============================================
+   🌤️ LIGHT THEME (Premium Soft UI)
+   ============================================ */
+:root {
+  --bg: #f1f5f9;
+  --bg-secondary: #e2e8f0;
+  --text: #0f172a;
+  --card: #f8fafc;
+  --border: #cbd5e1;
+  --glass: rgba(255, 255, 255, 0.7);
+  --glass-light: rgba(255, 255, 255, 0.5);
+
+  --gradient: linear-gradient(
+    135deg,
+    #f1f5f9 0%,
+    #e2e8f0 40%,
+    #cbd5e1 100%
+  );
+}
+
+/* ============================================
+   🌙 DARK THEME
+   ============================================ */
+[data-theme="dark"] {
+  --bg: #020617;
+  --bg-secondary: #0f172a;
+  --text: #e2e8f0;
+  --card: #020617;
+  --border: #1e293b;
+  --glass: rgba(15, 23, 42, 0.75);
+  --glass-light: rgba(255, 255, 255, 0.06);
+
+  --gradient: linear-gradient(
+    135deg,
+    #020617 0%,
+    #0f172a 50%,
+    #1e293b 100%
+  );
+}
+
+/* ============================================
+   🌍 GLOBAL
+   ============================================ */
+body {
+  margin: 0;
+  background: var(--gradient);
+  color: var(--text);
+  transition: background 0.4s ease, color 0.3s ease;
+}
+
+.glass-card {
+  @apply p-6 md:p-8 rounded-2xl backdrop-blur-md;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+}
+
+.img-style {
+  @apply w-full max-w-[380px] h-[240px] object-cover rounded-xl shadow-lg mx-auto transition duration-300 hover:scale-105;
+}
+
+.title {
+  @apply text-xl font-semibold mb-2 text-indigo-400;
+}
+
+.desc {
+  @apply opacity-70 text-sm;
+}
+
+.icon {
+  @apply hover:scale-125 transition cursor-pointer;
+}
+
+/* ============================================
+   📝 VIEWNOTE COMPONENT
+   ============================================ */
+
+/* ── Back button ── */
+.vn-back-btn {
+  color: var(--text);
+}
+
+/* ── Card ── */
+.vn-card {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* Noise texture overlay on card */
+.vn-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  border-radius: 28px;
+  pointer-events: none;
+  opacity: 0.4;
+  z-index: 0;
+}
+
+/* Ambient glow top-right */
+.vn-card-glow {
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, transparent 70%);
+}
+
+/* Card header border */
+.vn-card-header {
+  border-bottom: 1px solid var(--border);
+}
+
+/* Note title — clamp not possible in Tailwind */
+.vn-title {
+  font-family: 'Lora', Georgia, serif;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  color: var(--text);
+}
+
+/* ── Focus Mode button ── */
+.vn-focus-btn {
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  box-shadow: 0 8px 28px rgba(99, 102, 241, 0.4);
+}
+.vn-focus-btn:hover {
+  box-shadow: 0 14px 36px rgba(99, 102, 241, 0.55);
+}
+
+/* ── Meta badges (words / read time) ── */
+ .vn-meta-badge {
+  background: var(--bg-secondary);  
+  border: 1px solid var(--border);
+  color: var(--text);               
+}
+
+/* ── Focus overlay ── */
+.vn-focus-overlay {
+  background: var(--bg);
+  color: var(--text);
+  animation: vnFocusIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes vnFocusIn {
+  from { opacity: 0; transform: scale(0.975) translateY(12px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* ── Focus top bar ── */
+.vn-focus-bar {
+  background: rgba(2, 6, 23, 0.65);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* ── Timer pill ── */
+.vn-timer {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ── Exit button ── */
+.vn-exit-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: var(--text);
+}
+
+/* ── Focus title — clamp not possible in Tailwind ── */
+.vn-focus-title {
+  font-family: 'Lora', Georgia, serif;
+  font-size: clamp(2.8rem, 8vw, 5.5rem);
+  color: var(--text);
+}
+
+/* ── Focus content — clamp font size ── */
+.vn-focus-text {
+  font-size: clamp(1.15rem, 2.5vw, 1.45rem);
+  color: var(--text);
+}
+
+/* Elegant text selection */
+.vn-focus-text::selection      { background: rgba(99, 102, 241, 0.35); color: #fff; }
+.vn-focus-text::-moz-selection { background: rgba(99, 102, 241, 0.35); color: #fff; }
+
+/* ── Indigo divider ── */
+.vn-divider {
+  background: linear-gradient(90deg, #6366f1, #818cf8);
 }
