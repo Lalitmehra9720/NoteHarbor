@@ -189,7 +189,7 @@ const ViewNote = () => {
     <div className="vn-focus-overlay fixed inset-0 z-50 overflow-y-auto flex flex-col">
 
       {/* Top bar */}
-      <div className="vn-focus-bar sticky top-0 z-10 flex justify-between items-center px-8 h-[72px] w-full">
+      <div className="vn-focus-bar sticky top-0 z-10 flex justify-between items-center p-8 h-[72px] w-full">
         <div className="vn-timer flex items-center gap-2 px-4 py-2 rounded-full font-mono text-[10px] font-bold tracking-widest uppercase">
           <FiClock size={12} />
           {formatTime(seconds)}
