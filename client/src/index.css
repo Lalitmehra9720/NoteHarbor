@@ -1,0 +1,486 @@
+@import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;500;700;800;900&family=DM+Mono:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+/* ============================================
+   🌤️  LIGHT THEME
+   ============================================ */
+:root {
+  --hero-bg: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #a5b4fc 100%);
+  --bg: #f1f5f9;
+  --bg-secondary: #e2e8f0;
+  --text: #0f172a;
+  --card: #f8fafc;
+  --border: #cbd5e1;
+  --glass: rgba(255, 255, 255, 0.72);
+  --glass-light: rgba(255, 255, 255, 0.5);
+
+  --accent: #6366f1;
+  --accent-dark: #4f46e5;
+  --accent-light: rgba(99, 102, 241, 0.1);
+  --accent-glow: rgba(99, 102, 241, 0.4);
+  --accent-glow-hover: rgba(99, 102, 241, 0.58);
+  --accent-text: #4338ca;
+
+  --gradient: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 40%, #becfe2 100%);
+}
+
+/* ============================================
+   🌙  DARK THEME
+   ============================================ */
+[data-theme="dark"] {
+  --hero-bg: var(--gradient);
+  --bg: #020617;
+  --bg-secondary: #0f172a;
+  --text: #e2e8f0;
+  --card: #020617;
+  --border: #1e293b;
+  --glass: rgba(15, 23, 42, 0.78);
+  --glass-light: rgba(255, 255, 255, 0.06);
+
+  --accent: #818cf8;
+  --accent-dark: #6366f1;
+  --accent-light: rgba(129, 140, 248, 0.12);
+  --accent-glow: rgba(129, 140, 248, 0.35);
+  --accent-glow-hover: rgba(129, 140, 248, 0.52);
+  --accent-text: #a5b4fc;
+
+  --gradient: linear-gradient(135deg, #020617 0%, #0f172a 50%, #1e293b 100%);
+}
+
+/* ============================================
+   🌍  GLOBAL
+   ============================================ */
+body {
+  margin: 0;
+  background: var(--gradient);
+  color: var(--text);
+  transition: background 0.4s ease, color 0.3s ease;
+}
+
+/* ============================================
+   🧩  SHARED UTILITIES
+   ============================================ */
+.glass-card {
+  @apply p-6 md:p-8 rounded-2xl backdrop-blur-md;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+}
+.img-style {
+  @apply w-full max-w-[380px] h-[240px] object-cover rounded-xl shadow-lg mx-auto transition duration-300 hover:scale-105;
+}
+.title { @apply text-xl font-semibold mb-2 text-indigo-400; }
+.desc  { @apply opacity-70 text-sm; }
+.icon  { @apply hover:scale-125 transition cursor-pointer; }
+
+/* ============================================
+   📝  VIEWNOTE — STANDARD VIEW
+   ============================================ */
+.vn-back-btn { color: var(--text); }
+
+.vn-card {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  box-shadow:
+    0 32px 80px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.vn-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  border-radius: 28px;
+  pointer-events: none;
+  opacity: 0.35;
+  z-index: 0;
+}
+
+.vn-card-header { border-color: var(--border); }
+
+.vn-title {
+  font-family: 'Lora', Georgia, serif;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  color: var(--text);
+}
+
+.vn-meta-badge {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  color: var(--text);
+  opacity: 0.72;
+}
+
+.vn-note-body {
+  font-size: 1.15rem;
+  line-height: 1.9;
+  color: var(--text);
+  opacity: 0.82;
+}
+
+/* ============================================
+   🔤  FONT SELECTOR
+   ============================================ */
+.vn-font-selector {
+  display: flex;
+  gap: 3px;
+  padding: 4px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg-secondary);
+  overflow-x: auto;
+}
+
+.vn-font-opt {
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  border: none;
+  cursor: pointer;
+  background: transparent;
+  color: var(--text);
+  opacity: 0.38;
+  transition: opacity 0.18s, background 0.18s, color 0.18s;
+}
+.vn-font-opt:hover { opacity: 0.78; }
+
+/* ✅ Selected — clean indigo, no invert */
+.vn-font-opt--active {
+  background: var(--accent) !important;
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+.vn-font-opt--focus { padding: 5px 12px; font-size: 9px; }
+
+/* ============================================
+   🔘  ACTION BUTTONS
+   ============================================ */
+.vn-btn-copy {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  color: var(--text);
+  cursor: pointer;
+}
+.vn-btn-copy:hover { opacity: 0.8; }
+.vn-btn-copy--done {
+  background: rgba(34, 197, 94, 0.09) !important;
+  border-color: rgba(34, 197, 94, 0.4) !important;
+  color: #16a34a !important;
+}
+
+/* ✅ Focus Mode button — indigo gradient + glow */
+.vn-focus-btn {
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  border: none;
+  box-shadow: 0 8px 24px var(--accent-glow);
+  transition: box-shadow 0.22s, transform 0.18s;
+  cursor: pointer;
+}
+.vn-focus-btn:hover {
+  box-shadow: 0 12px 36px var(--accent-glow-hover);
+  transform: translateY(-1px);
+}
+.vn-focus-btn:active {
+  transform: scale(0.97);
+}
+
+/* ============================================
+   ✨  AI SUMMARY PANEL
+   ============================================ */
+.vn-ai-panel {
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--bg-secondary);
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.vn-ai-panel:focus-within {
+  border-color: var(--accent);
+}
+
+/* Panel header row — clickable */
+.vn-ai-panel__header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 20px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--text);
+  text-align: left;
+  transition: background 0.18s;
+}
+.vn-ai-panel__header:hover {
+  background: var(--accent-light);
+}
+
+/* Zap icon circle */
+.vn-ai-panel__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: var(--accent-light);
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.vn-ai-panel__title {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+/* "Powered by Claude" badge */
+.vn-ai-panel__badge {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 99px;
+  background: var(--accent-light);
+  color: var(--accent-text);
+  border: 1px solid var(--accent);
+  opacity: 0.85;
+}
+
+.vn-ai-panel__chevron {
+  margin-left: auto;
+  color: var(--text);
+  opacity: 0.4;
+}
+
+/* Collapsible body */
+.vn-ai-panel__body {
+  padding: 0 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  border-top: 1px solid var(--border);
+}
+
+/* ── Mode tabs ── */
+.vn-ai-modes {
+  display: flex;
+  gap: 6px;
+  padding-top: 16px;
+  flex-wrap: wrap;
+}
+
+.vn-ai-mode {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.18s;
+  text-align: left;
+}
+.vn-ai-mode:hover {
+  border-color: var(--accent);
+  background: var(--accent-light);
+}
+.vn-ai-mode--active {
+  border-color: var(--accent) !important;
+  background: var(--accent-light) !important;
+}
+
+.vn-ai-mode__label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+.vn-ai-mode--active .vn-ai-mode__label {
+  color: var(--accent);
+}
+
+.vn-ai-mode__desc {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  opacity: 0.5;
+  color: var(--text);
+}
+
+/* ── Summarize run button ── */
+.vn-ai-run-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  color: #ffffff;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 6px 20px var(--accent-glow);
+  transition: box-shadow 0.2s, transform 0.18s, opacity 0.2s;
+  align-self: flex-start;
+}
+.vn-ai-run-btn:hover:not(:disabled) {
+  box-shadow: 0 10px 28px var(--accent-glow-hover);
+  transform: translateY(-1px);
+}
+.vn-ai-run-btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+.vn-ai-run-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* Spinner inside button */
+.vn-ai-spinner {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  animation: vnSpin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+@keyframes vnSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Result box ── */
+.vn-ai-result {
+  border-radius: 14px;
+  border: 1px solid var(--accent);
+  background: var(--accent-light);
+  padding: 18px 20px 14px;
+  animation: vnFadeIn 0.3s ease both;
+}
+@keyframes vnFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.vn-ai-result__text {
+  font-size: 0.95rem;
+  line-height: 1.75;
+  color: var(--text);
+  opacity: 0.88;
+  white-space: pre-wrap;
+  margin: 0 0 12px;
+}
+
+.vn-ai-result__footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.vn-ai-copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  opacity: 0.55;
+  transition: opacity 0.18s, background 0.18s;
+}
+.vn-ai-copy-btn:hover {
+  opacity: 1;
+  background: var(--bg-secondary);
+}
+
+/* ============================================
+   🔍  FOCUS MODE
+   ============================================ */
+.vn-focus-overlay {
+  background: var(--bg);
+  color: var(--text);
+  animation: vnFocusIn 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes vnFocusIn {
+  from { opacity: 0; transform: scale(0.976) translateY(10px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.vn-focus-bar {
+  background: rgba(255, 255, 255, 0.72);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+[data-theme="dark"] .vn-focus-bar {
+  background: rgba(2, 6, 23, 0.78);
+  border-bottom-color: rgba(255, 255, 255, 0.07);
+}
+
+.vn-timer {
+  color: #16a34a;
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.25);
+}
+
+.vn-exit-btn {
+  background: #ef4444;
+  border: 1px solid var(--border);
+  color: var(--text);
+  opacity: 0.55;
+  cursor: pointer;
+}
+.vn-exit-btn:hover {
+  background: #ef4444;
+  border-color: #ef4444;
+  color: #ffffff;
+  opacity: 1;
+}
+
+.vn-focus-title {
+  font-family: 'Lora', Georgia, serif;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  color: var(--text);
+}
+
+.vn-divider {
+  background: linear-gradient(90deg, #6366f1, #818cf8);
+}
+
+.vn-focus-text {
+  font-size: clamp(1.15rem, 2.5vw, 1.25rem);
+  line-height: 1.40;
+  color: var(--text);
+  opacity: 0.88;
+}
+.vn-focus-text::selection      { background: rgba(99, 102, 241, 0.32); color: #fff; }
+.vn-focus-text::-moz-selection { background: rgba(99, 102, 241, 0.32); color: #fff; }
