@@ -5,8 +5,7 @@
 ---
 
 ## 📸 Preview
-![NoteHarbor Homepage](./public/screenshot.png)
-
+![NoteHarbor Homepage](./client/public/screenshot.png)
 ---
 
 ## ✨ Key Features
@@ -68,6 +67,6 @@ cd client && npm run dev
 🤝 Connect & Feedback
 Your feedback helps me grow! Reach out via:
 
-LinkedIn: Lalit Mehra
+LinkedIn: [Lalit Mehra] (https://www.linkedin.com/in/lalit-mehra-8a798228a/)
 
 Live Site: https://note-harbor-83hu.vercel.app/
