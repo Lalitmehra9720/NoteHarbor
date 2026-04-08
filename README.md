@@ -5,8 +5,7 @@
 ---
 
 ## 📸 Preview
-![NoteHarbor Homepage](https://note-harbor-83hu.vercel.app/screenshot.png) 
-> *Note: Replace this link with your actual screenshot path once uploaded to GitHub.*
+![NoteHarbor Homepage](./public/screenshot.png)
 
 ---
 
@@ -41,7 +40,7 @@
 
 1. **Clone the repository:**
    ```bash
-   git clone [https://github.com/Lalitmehra9720/NoteHarbor.git](https://github.com/Lalitmehra9720/NoteHarbor.git)
+   git clone [https://github.com/Lalitmehra9720/NoteHarbor.git]
 Install Dependencies:
 
 Bash
