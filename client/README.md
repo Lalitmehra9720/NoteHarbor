@@ -1,16 +1,75 @@
-# React + Vite
+# ⚓ NoteHarbor v2
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**NoteHarbor** is a high-performance, AI-integrated note-taking ecosystem built with the **MERN Stack**. It’s designed to transform messy thoughts into organized, actionable insights with a focus on modern UI/UX and professional productivity.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 📸 Preview
+![NoteHarbor Homepage](https://note-harbor-83hu.vercel.app/screenshot.png) 
+> *Note: Replace this link with your actual screenshot path once uploaded to GitHub.*
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## ✨ Key Features
 
-## Expanding the ESLint configuration
+### 🎨 Modern UI/UX Overhaul
+* **Production-Ready Components:** Custom `FeatureGrid`, `StatsSection`, and `CTASection` for a sleek landing experience.
+* **Theming:** Seamless **Dark & Light Mode** support.
+* **Responsive Design:** Fully optimized for mobile, tablet, and desktop.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### 🧠 Smart Functionality
+* **AI Summarization:** Powered by **Gemini AI**, get instant summaries (Short, Detailed, or ELI5) of your long notes.
+* **Focus Mode:** Integrated reading time tracker and 5 customizable font styles for a distraction-free experience.
+* **Live Search:** High-performance search with real-time text highlighting.
+
+### 🛠️ Full-Stack Robustness
+* **MERN Architecture:** Secure Authentication (JWT), MongoDB integration, and optimized API routes.
+* **User Support:** Integrated Help Center (direct email/phone) and a live Feedback system.
+
+---
+
+## 🚀 Tech Stack
+
+| Frontend            | Backend        | Database / AI       |
+|        :---         |     :---       |         :---        |
+| **React 18** (Vite) | **Node.js**    | **MongoDB**         |
+| **Tailwind CSS**    | **Express.js** | **Gemini AI API**   |
+| **Framer Motion**   | **JWT Auth**   | **Vercel / Render** |
+
+---
+
+## 🛠️ Installation & Setup
+
+1. **Clone the repository:**
+   ```bash
+   git clone [https://github.com/Lalitmehra9720/NoteHarbor.git](https://github.com/Lalitmehra9720/NoteHarbor.git)
+Install Dependencies:
+
+Bash
+# For Client
+cd client && npm install
+
+# For Server
+cd server && npm install
+Environment Variables:
+Create a .env file in the server folder. DO NOT share this file on GitHub. Add the following template:
+
+Code snippet
+PORT=5000
+MONGO_URI=your_mongodb_connection_string
+GEMINI_API_KEY=your_gemini_api_key
+JWT_SECRET=your_random_secret_key
+Run the App:
+
+Bash
+# Start Server
+cd server && npm start
+
+# Start Client
+cd client && npm run dev
+🤝 Connect & Feedback
+Your feedback helps me grow! Reach out via:
+
+LinkedIn: Lalit Mehra
+
+Live Site: Explore NoteHarbor
