@@ -13,6 +13,8 @@ import TermsOfService from "../pages/docs/TermsOfService";
 import PrivacyPolicy from "../pages/docs/PrivacyPolicy";
 import AuthLayout from "../layouts/AuthLayout";
 import MainLayout from "../layouts/MainLayout";
+import ExplorePage from "../pages/ExplorePage";
+import PublicProfilePage from "../pages/PublicProfilePage";
 
 function AppRoutes() {
   return (
@@ -70,6 +72,8 @@ function AppRoutes() {
     </ProtectedRoute>
   }
 />
+<Route path="/explore"       element={<ExplorePage />} />
+<Route path="/profile/:id"   element={<PublicProfilePage />} />
       <Route
         path="/note/:id"
         element={

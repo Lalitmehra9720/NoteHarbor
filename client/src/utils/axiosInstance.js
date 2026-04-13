@@ -2,7 +2,7 @@ import axios from "axios";
 
 const axiosInstance = axios.create({
   // baseURL: "http://localhost:5000/api",
-  baseURL: "https://note-harbor-2lga.vercel.app/api",
+     baseURL: import.meta.env.VITE_BACKEND_URL || "http://localhost:5000/api"
 });
 
 // Attach token automatically

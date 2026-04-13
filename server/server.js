@@ -10,6 +10,8 @@ import userRoutes from "./routes/userRoutes.js";
 import User from "./models/User.js";
 import Note from "./models/Note.js";
 import Feedback from "./models/Feedback.js";
+import publicRoutes from "./routes/publicRoutes.js";
+
 
 const PORT = process.env.PORT || 5000;
 
@@ -23,7 +25,7 @@ console.log("Notes route loaded");
 app.use("/api/notes", noteRoutes);
 app.use("/api/feedback", feedbackRoutes);
 app.use("/api/users", userRoutes);
-
+app.use("/api/public", publicRoutes);
 
 // Test route
 app.get("/", (req, res) => {

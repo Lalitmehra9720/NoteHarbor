@@ -156,6 +156,7 @@ const NAV_LINKS = [
   { label: "Help Center", to: "/help" },
   { label: "Privacy",     to: "/privacy" },
   { label: "Terms",       to: "/terms" },
+  { label: "Explore", to: "/explore" },
 ];
 
 const Navbar = () => {

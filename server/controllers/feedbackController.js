@@ -1,6 +1,3 @@
-
-
-
 import Feedback from "../models/Feedback.js";
 
 // 📥 Get last 5 feedbacks
