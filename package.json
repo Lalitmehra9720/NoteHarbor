@@ -1,0 +1,14 @@
+{
+  "name": "noteharbor-root",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "cd client && npm install && npm run build",
+    "cap-copy": "npx cap copy",
+    "cap-sync": "npx cap sync"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.3.1",
+    "@capacitor/cli": "^8.3.1",
+    "@capacitor/core": "^8.3.1"
+  }
+}
