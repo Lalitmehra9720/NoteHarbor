@@ -12,9 +12,7 @@ import Note from "./models/Note.js";
 import Feedback from "./models/Feedback.js";
 import publicRoutes from "./routes/publicRoutes.js";
 
-
 const PORT = process.env.PORT || 5000;
-
 
 const app = express();
 

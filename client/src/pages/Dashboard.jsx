@@ -11,6 +11,7 @@ import NoteCard from "../components/notes/NoteCard";
 import NoteModal from "../components/notes/Note_Modal";
 import NotesToolbar from "../components/notes/NotesToolbar";
 import FeedbackModal from "../components/Modals/FeedbackModal";
+import BackButton from "../components/ui/BackButton";
 
 import { FaUser } from "react-icons/fa";
 import { FiFileText, FiSearch, FiLoader, FiArrowRight, FiPlusCircle } from "react-icons/fi";
@@ -115,11 +116,16 @@ const Dashboard = () => {
   const isSearching  = debouncedSearch.trim().length > 0;
 
   return (
-    <div className="min-h-screen py-10 px-4 md:px-8">
+    <div className="min-h-screen py-10 px-4 md:px-8 relative">
+
+    {/* Back Button */}
+    <div className="absolute top-6 left-6 ">
+      <BackButton />
+    </div>
       <div className="max-w-7xl mx-auto">
 
         {/* ── HEADER ── */}
-        <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-6 mb-10">
+        <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-6 mb-10 mt-10">
 
           {/* Profile */}
           <div className="flex items-center gap-4">
