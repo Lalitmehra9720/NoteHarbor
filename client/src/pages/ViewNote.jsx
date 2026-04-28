@@ -162,16 +162,13 @@ const ViewNote = () => {
                 </div>
               </div>
             </div>
-            {/* ✨ AI Summary Panel — separate component */}
+            {/*  AI Summary Panel — separate component */}
             <AiPanel note={note} />
 
             {/* Note content */}
             <p className={`${fontCls} vn-note-body whitespace-pre-wrap mb-10 mt-10`}>
               {note.content}
             </p>
-
-            
-
           </div>
         </div>
       </div>
@@ -200,9 +197,12 @@ const ViewNote = () => {
           <FiX size={13} /> Close
         </button>
       </div>
+      <div className="m-6">
+        <BackButton />
+      </div>
 
       {/* Content */}
-      <div className="flex-1 w-full max-w-[850px] mx-auto px-6 md:px-16 pt-16 pb-40">
+      <div className="flex-1 w-full max-w-[850px] mx-auto px-6 md:px-16 pt-10 pb-40">
         <h1 className="vn-focus-title font-black tracking-tighter leading-[1.1] mb-8 break-words">
           {note.title}
         </h1>
