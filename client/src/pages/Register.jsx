@@ -2,25 +2,19 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { registerUser } from "../services/authService";
-import useAuth from "../hooks/useAuth";
 import Button from "../components/ui/Button";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Register = () => {
   const navigate = useNavigate();
-  const { login } = useAuth();
-
   const [showPassword, setShowPassword] = useState(false);
-
   const [form, setForm] = useState({
     name: "",
     email: "",
     password: "",
   });
-
   const [loading, setLoading] = useState(false);
 
-  // 🔐 Password validation
   const validatePassword = (password) => {
     const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{6,}$/;
     return regex.test(password);
@@ -45,13 +39,10 @@ const Register = () => {
 
     try {
       setLoading(true);
-
       const data = await registerUser(form);
 
-      login(data.token);
-
-      toast.success("Account created 🎉");
-      navigate("/dashboard");
+      toast.success(data.message || "OTP sent to your email");
+      navigate("/verify-otp", { state: { email: data.email || form.email } });
     } catch (error) {
       toast.error(error.response?.data?.message || "Registration failed");
     } finally {
@@ -64,7 +55,6 @@ const Register = () => {
       <h2 className="text-2xl font-bold mb-6 text-center">Create Account</h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Name */}
         <input
           type="text"
           name="name"
@@ -79,7 +69,6 @@ const Register = () => {
           }}
         />
 
-        {/* Email */}
         <input
           type="email"
           name="email"
@@ -94,7 +83,6 @@ const Register = () => {
           }}
         />
 
-        {/* Password */}
         <div className="relative">
           <input
             type={showPassword ? "text" : "password"}
@@ -114,22 +102,21 @@ const Register = () => {
             type="button"
             onClick={() => setShowPassword((prev) => !prev)}
             className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
+            aria-label={showPassword ? "Hide password" : "Show password"}
           >
             {showPassword ? <FaEyeSlash /> : <FaEye />}
           </button>
         </div>
 
-        {/* 🔥 Password Hint */}
         <p className="text-xs opacity-60">
           Must include uppercase, lowercase, special character & 6+ length
         </p>
 
         <Button type="submit" className="w-full" disabled={loading}>
-          {loading ? "Creating..." : "Create Account"}
+          {loading ? "Sending OTP..." : "Send OTP"}
         </Button>
       </form>
 
-      {/* 🔥 Switch Auth */}
       <p className="text-center mt-4 text-sm opacity-70">
         Already have an account?{" "}
         <Link to="/login" className="text-indigo-500 hover:underline">

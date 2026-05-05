@@ -3,6 +3,8 @@ import { Routes, Route } from "react-router-dom";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
+import VerifyOtp from "../pages/VerifyOtp";
+import ForgotPassword from "../pages/ForgotPassword";
 import Dashboard from "../pages/Dashboard";
 import ViewNote from "../pages/ViewNote";
 import About from "../pages/About";
@@ -110,6 +112,22 @@ function AppRoutes() {
         element={
           <AuthLayout>
             <Register />
+          </AuthLayout>
+        }
+      />
+      <Route
+        path="/verify-otp"
+        element={
+          <AuthLayout>
+            <VerifyOtp />
+          </AuthLayout>
+        }
+      />
+      <Route
+        path="/forgot-password"
+        element={
+          <AuthLayout>
+            <ForgotPassword />
           </AuthLayout>
         }
       />

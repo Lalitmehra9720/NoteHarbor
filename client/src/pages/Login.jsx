@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import axiosInstance from "../utils/axiosInstance";
 import useAuth from "../hooks/useAuth";
 import { useNavigate, Link } from "react-router-dom";
 import Button from "../components/ui/Button";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import toast from "react-hot-toast";
+import { loginUser } from "../services/authService";
 
 const Login = () => {
   const { login, user } = useAuth();
@@ -39,7 +39,7 @@ const Login = () => {
     try {
       setLoading(true);
 
-      const { data } = await axiosInstance.post("/auth/login", form);
+      const data = await loginUser(form);
 
       login(data.token);
 
@@ -102,6 +102,12 @@ const Login = () => {
           {loading ? "Logging in..." : "Login"}
         </Button>
       </form>
+
+      <p className="text-center mt-4 text-sm opacity-70">
+        <Link to="/forgot-password" className="text-indigo-500 hover:underline">
+          Forgot password?
+        </Link>
+      </p>
 
       {/* Switch Auth */}
       <p className="text-center mt-4 text-sm opacity-70">
