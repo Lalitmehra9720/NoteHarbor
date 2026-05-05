@@ -58,7 +58,7 @@ export const register = async (req, res) => {
     await sendOtpMail({
       email: normalizedEmail,
       otp,
-      subject: "Verify your Notes App account",
+      subject: "Verify your NoteHarbor account",
     });
 
     res.status(200).json({
@@ -203,7 +203,7 @@ export const forgotPassword = async (req, res) => {
     await sendOtpMail({
       email: normalizedEmail,
       otp,
-      subject: "Reset your Notes App password",
+      subject: "Reset your NoteHarbor password",
     });
 
     res.json({ message: "Password reset OTP sent", email: normalizedEmail });
