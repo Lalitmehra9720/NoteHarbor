@@ -115,7 +115,7 @@ const About = () => {
 
         {/* 👨‍💻 DEV */}
         <div className="glass-card text-center">
-          <h2 className="text-xl font-bold mb-2">Built by Lalit </h2>
+          <h2 className="text-xl font-bold mb-2">Built by Lalit Mehra, Rudra Singh, Rohan Mehra, Ritesh Rawat </h2>
           <p className="opacity-70">
             Full Stack Developer building modern web apps with MERN.
           </p>
