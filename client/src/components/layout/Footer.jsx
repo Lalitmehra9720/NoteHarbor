@@ -26,16 +26,16 @@ const Footer = () => {
           </p>
 
           <div className="flex gap-4 mt-4 text-xl">
-            <a href="#" className="hover:text-indigo-600 transition">
+            <a href="https://github.com/Lalitmehra9720" className="hover:text-indigo-600 transition">
               <FaGithub />
             </a>
-            <a href="#" className="hover:text-indigo-600 transition">
+            <a href="https://www.linkedin.com/in/lalit-mehra-8a798228a/" className="hover:text-indigo-600 transition">
               <FaLinkedin />
             </a>
             <a href="#" className="hover:text-indigo-600 transition">
               <FaTwitter />
             </a>
-            <a href="#" className="hover:text-indigo-600 transition">
+            <a href="mailto:lalitmehra1255@gmail.com" className="hover:text-indigo-600 transition">
               <FaEnvelope />
             </a>
           </div>
