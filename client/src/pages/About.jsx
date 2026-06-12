@@ -2,7 +2,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { FaReact, FaNodeJs } from "react-icons/fa";
 import { SiMongodb, SiTailwindcss } from "react-icons/si";
 import BackButton from "../components/ui/BackButton";
-
+import TeamMembers from "../components/ui/TeamMembers";
 const About = () => {
   const { scrollY } = useScroll();
 
@@ -114,12 +114,13 @@ const About = () => {
         </div>
 
         {/* 👨‍💻 DEV */}
-        <div className="glass-card text-center">
+        {/* <div className="glass-card text-center">
           <h2 className="text-xl font-bold mb-2">Built by Lalit Mehra, Rudra Singh, Rohan Mehra, Ritesh Rawat </h2>
           <p className="opacity-70">
             Full Stack Developer building modern web apps with MERN.
           </p>
-        </div>
+        </div> */}
+        <TeamMembers />
       </div>
     </div>
   );
