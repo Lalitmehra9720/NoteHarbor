@@ -254,7 +254,7 @@ export default function TeamCards() {
               <div className="flex items-center gap-3">
                 <MemberAvatar member={member} colors={colors} />
                 <div>
-                  <p className="font-semibold text-sm">{member.name}</p>
+                  <p className="font-semibold text-lg">{member.name}</p>
                   <p className="text-xs opacity-60">{member.title}</p>
                 </div>
               </div>
